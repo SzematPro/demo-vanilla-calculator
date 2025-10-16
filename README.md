@@ -44,7 +44,7 @@ A production-ready demo, web calculator built with vanilla JavaScript, featuring
 1. **Clone or download** the project files:
    ```bash
    git clone <repository-url>
-   cd calculator_demo
+   cd demo-vanilla-calculator
    ```
 
 2. **Serve the files** using any web server:

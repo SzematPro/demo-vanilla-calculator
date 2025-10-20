@@ -19,6 +19,8 @@
   --btn-operator-hover: #0056b3;
   --btn-function-bg: #6c757d;
   --btn-function-hover: #545b62;
+  --btn-clear-bg: #fd7e14;
+  --btn-clear-hover: #e8590c;
   --btn-equals-bg: #28a745;
   --btn-equals-hover: #1e7e34;
   
@@ -71,6 +73,8 @@
   --btn-operator-hover: #0b5ed7;
   --btn-function-bg: #495057;
   --btn-function-hover: #6c757d;
+  --btn-clear-bg: #fd7e14;
+  --btn-clear-hover: #e8590c;
   --btn-equals-bg: #198754;
   --btn-equals-hover: #157347;
 }
@@ -222,7 +226,7 @@ body {
   border: none;
   border-radius: var(--radius-md);
   font-family: var(--font-family);
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-2xl);
   font-weight: 500;
   cursor: pointer;
   transition: all var(--transition-fast);
@@ -290,6 +294,66 @@ body {
   background: var(--btn-function-hover);
   transform: translateY(-1px);
   box-shadow: 0 4px 8px var(--shadow-medium);
+}
+
+/* Clear buttons (C and CE) - Orange styling */
+.btn[data-action="clear"],
+.btn[data-action="clear-entry"] {
+  background: var(--btn-clear-bg);
+  color: white;
+}
+
+.btn[data-action="clear"]:hover,
+.btn[data-action="clear-entry"]:hover {
+  background: var(--btn-clear-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px var(--shadow-medium);
+}
+
+/* Fancy backspace icon - Arrow pointing left with line */
+.backspace-icon {
+  position: relative;
+  display: inline-block;
+  width: 20px;
+  height: 16px;
+  transition: all var(--transition-fast);
+}
+
+.backspace-icon::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-right: 10px solid currentColor;
+  transform: translate(-50%, -50%);
+}
+
+.backspace-icon::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 2px;
+  background: currentColor;
+  transform: translate(-30%, -50%);
+  border-radius: 1px;
+}
+
+.btn[data-action="backspace"]:hover .backspace-icon {
+  transform: scale(1.1);
+}
+
+.btn[data-action="backspace"]:hover .backspace-icon::before {
+  border-right-color: #fff;
+}
+
+.btn[data-action="backspace"]:hover .backspace-icon::after {
+  background: #fff;
 }
 
 .btn-equals {

@@ -1,3 +1,5 @@
+# Live Demo: https://vanilla-calc.szemat.pro
+
 # 🧮 Demo Web Calculator
  
 A production-ready demo, web calculator built with vanilla JavaScript, featuring 12-digit precision, mobile-first responsive design, and comprehensive accessibility support.

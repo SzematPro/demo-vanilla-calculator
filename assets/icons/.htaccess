@@ -1,0 +1,3 @@
+# Prevent directory listing in icons folder
+Options -Indexes
+

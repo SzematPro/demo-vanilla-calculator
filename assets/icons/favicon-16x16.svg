@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+  <!-- Simplified calculator optimized for 16x16 -->
+  <rect x="1.5" y="2" width="13" height="12" rx="2" fill="#007bff"/>
+  <rect x="3" y="3.5" width="10" height="3" rx="0.5" fill="#ffffff"/>
+  <!-- Simplified button grid -->
+  <circle cx="4.5" cy="8.5" r="1" fill="#ffffff"/>
+  <circle cx="7" cy="8.5" r="1" fill="#ffffff"/>
+  <circle cx="9.5" cy="8.5" r="1" fill="#28a745"/>
+  <circle cx="12" cy="8.5" r="1" fill="#ffffff"/>
+  <circle cx="4.5" cy="11" r="1" fill="#ffffff"/>
+  <circle cx="7" cy="11" r="1" fill="#ffffff"/>
+  <circle cx="9.5" cy="11" r="1" fill="#ffffff"/>
+  <ellipse cx="8" cy="13.5" rx="4" ry="1" fill="#28a745"/>
+</svg>
+

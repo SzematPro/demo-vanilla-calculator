@@ -1,0 +1,9 @@
+# Prevent directory listing in tests folder
+Options -Indexes
+
+# Allow access to tests.html but not directory listing
+<FilesMatch "^(?!tests\.html$).*">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+

@@ -1,0 +1,13 @@
+# robots.txt - Search engine optimization and directory protection
+User-agent: *
+
+# Allow main pages
+Allow: /
+Allow: /index.html
+
+# Disallow asset and test directories
+Disallow: /assets/
+Disallow: /tests/
+
+# Sitemap location
+Sitemap: https://vanilla-calc.szemat.pro/sitemap.xml

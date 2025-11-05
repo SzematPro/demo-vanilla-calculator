@@ -1,0 +1,9 @@
+# Prevent directory listing in assets folder
+Options -Indexes
+
+# Deny access to index.html in this directory
+<Files "index.html">
+    Order allow,deny
+    Deny from all
+</Files>
+

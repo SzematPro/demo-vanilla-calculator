@@ -145,8 +145,6 @@ Initial release of the Enterprise Edition calculator with comprehensive features
 
 ### File Structure
 
-![File Structure Diagram](diagrams/file-structure.png "File Structure Diagram")
-
 ```mermaid
 graph TD
     A[demo-vanilla-calculator/] --> B[index.html]
@@ -275,8 +273,6 @@ demo-vanilla-calculator/
 
 ### User Flow
 
-![User Flow Diagram](diagrams/user-flow.png "User Flow Diagram")
-
 ```mermaid
 flowchart TD
     START([User Opens Calculator]) --> INIT{Calculator Initialized?}
@@ -340,8 +336,6 @@ flowchart TD
 ```
 
 ### Calculation Flow
-
-![Calculation Flow Diagram](diagrams/calculation-flow.png "Calculation Flow Diagram")
 
 ```mermaid
 sequenceDiagram
@@ -496,8 +490,6 @@ sequenceDiagram
 
 ### System Architecture
 
-![System Architecture Diagram](diagrams/system-architecture.png "System Architecture Diagram")
-
 ```mermaid
 graph TB
     subgraph "User Interface Layer"
@@ -564,8 +556,6 @@ graph TB
 - **Strategy Pattern**: Different calculation methods for different operations
 
 ### Component Structure
-
-![Component Structure Diagram](diagrams/component-structure.png "Component Structure Diagram")
 
 ```mermaid
 classDiagram
@@ -1013,8 +1003,6 @@ For production environments, consider implementing:
 This section provides comprehensive API documentation for the Calculator class and utility functions. The calculator is instantiated automatically when the page loads and is available globally as `window.calculator`.
 
 ### API Overview
-
-![API Overview Diagram](diagrams/api-overview.png "API Overview Diagram")
 
 ```mermaid
 graph LR

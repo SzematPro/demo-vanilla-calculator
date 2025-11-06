@@ -667,6 +667,62 @@
                     throw new Error('Leading zeros not handled correctly');
                 }
             });
+
+            testSuite.test('Change operator selection', async () => {
+                testSuite.calculator.clear();
+                // Input 36
+                testSuite.calculator.inputNumber('3');
+                testSuite.calculator.inputNumber('6');
+                // Select operator x (multiply)
+                testSuite.calculator.inputOperator('×');
+                // Verify display still shows 36
+                if (testSuite.calculator.currentInput !== '36') {
+                    throw new Error(`After selecting × operator, display should show 36, got ${testSuite.calculator.currentInput}`);
+                }
+                // Verify operator is ×
+                if (testSuite.calculator.operator !== '×') {
+                    throw new Error(`Operator should be ×, got ${testSuite.calculator.operator}`);
+                }
+                // Select operator - (minus) - should just update operator, not calculate
+                testSuite.calculator.inputOperator('−');
+                // Verify display still shows 36 (not calculated)
+                if (testSuite.calculator.currentInput !== '36') {
+                    throw new Error(`After changing operator to −, display should still show 36, got ${testSuite.calculator.currentInput}`);
+                }
+                // Verify operator is now −
+                if (testSuite.calculator.operator !== '−') {
+                    throw new Error(`Operator should be −, got ${testSuite.calculator.operator}`);
+                }
+                // Verify previousInput is still 36
+                if (testSuite.calculator.previousInput !== 36) {
+                    throw new Error(`previousInput should be 36, got ${testSuite.calculator.previousInput}`);
+                }
+            });
+
+            testSuite.test('Change operator after entering second number', async () => {
+                testSuite.calculator.clear();
+                // Input 36
+                testSuite.calculator.inputNumber('3');
+                testSuite.calculator.inputNumber('6');
+                // Select operator ×
+                testSuite.calculator.inputOperator('×');
+                // Input 2 (second number)
+                testSuite.calculator.inputNumber('2');
+                // Verify display shows 2
+                if (testSuite.calculator.currentInput !== '2') {
+                    throw new Error(`After entering 2, display should show 2, got ${testSuite.calculator.currentInput}`);
+                }
+                // Select operator − (should calculate 36 × 2 = 72 first)
+                testSuite.calculator.inputOperator('−');
+                // Verify display shows 72 (calculated result)
+                if (testSuite.calculator.currentInput !== '72') {
+                    throw new Error(`After changing operator to − after entering number, should calculate first. Expected 72, got ${testSuite.calculator.currentInput}`);
+                }
+                // Verify operator is now −
+                if (testSuite.calculator.operator !== '−') {
+                    throw new Error(`Operator should be −, got ${testSuite.calculator.operator}`);
+                }
+            });
         }
 
         // Accessibility tests

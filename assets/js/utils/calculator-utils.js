@@ -3,7 +3,7 @@
  * Pure utility functions for calculator operations (no instance dependencies)
  * 
  * @namespace CalculatorUtils
- * @version 1.0.0
+ * @version 1.0.1
  * @author Waldemar Szemat
  */
 

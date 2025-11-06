@@ -6,6 +6,20 @@ A production-ready, enterprise-grade web calculator built with vanilla JavaScrip
 
 **Author:** Waldemar Szemat
 
+## Version 1.0.1
+
+Latest release with bug fixes and improvements. See [CHANGELOG.md](CHANGELOG.md) for complete version history and detailed change log.
+
+### Recent Updates (v1.0.1)
+
+- Fixed operator selection bug where changing operator before entering a second number would incorrectly trigger a calculation
+- Fixed duplicate "Theme" label in settings modal
+- Fixed high-contrast theme toggle icon to use proper contrast SVG icon
+- Fixed layout shift in Casio theme when operation display appears/disappears
+- Added new "Casio" theme with ultra-realistic calculator appearance inspired by Casio DH-12
+- Added new "TI SR-56 Vintage" theme with ultra-realistic vintage calculator appearance inspired by Texas Instruments SR-56
+- Added comprehensive test cases for operator change behavior
+
 ## Version 1.0.0
 
 Initial release of the Enterprise Edition calculator with comprehensive features, advanced functionality, and enterprise-grade standards.
@@ -40,7 +54,7 @@ Initial release of the Enterprise Edition calculator with comprehensive features
   - **CSP Reporting**: Documentation included for enabling CSP violation reporting (see `.htaccess` comments)
 - **Directory Protection**:
   - .htaccess files prevent directory listing in assets/, assets/js/utils/, tests/, and root
-  - index.html files in subdirectories block direct access to protected directories (assets/, assets/js/, assets/js/utils/, assets/css/, assets/icons/, tests/, diagrams/)
+  - index.html files in subdirectories block direct access to protected directories (assets/, assets/js/, assets/js/utils/, assets/css/, assets/icons/, tests/)
   - robots.txt prevents search engine indexing of asset directories
 - **Safe Storage Access**: Graceful fallback when localStorage/sessionStorage is unavailable
 - **Operator Validation**: Whitelist-based operator validation prevents injection attacks
@@ -50,7 +64,7 @@ Initial release of the Enterprise Edition calculator with comprehensive features
 ### User Experience
 
 - **Mobile-first responsive design** that works on all devices
-- **Enhanced theme system**: Light, Dark, and High Contrast themes (WCAG AAA compliant)
+- **Enhanced theme system**: Light, Dark, High Contrast, Casio, and TI SR-56 Vintage themes (WCAG AAA compliant)
 - **Auto theme detection**: Respects system color scheme preferences
 - **Calculation history**: Sidebar panel with clickable history items
 - **Memory indicator**: Visual indicator when memory has stored values
@@ -150,7 +164,6 @@ graph TD
     A[demo-vanilla-calculator/] --> B[index.html]
     A --> C[assets/]
     A --> D[tests/]
-    A --> E[diagrams/]
     A --> F[sw.js]
     A --> G[site.webmanifest]
     A --> H[sitemap.xml]
@@ -192,20 +205,10 @@ graph TD
     D --> D2[.htaccess]
     D --> D3[index.html]
     
-    E --> E1[file-structure.png]
-    E --> E2[system-architecture.png]
-    E --> E3[component-structure.png]
-    E --> E3[api-overview.png]
-    E --> E4[user-flow.png]
-    E --> E5[calculation-flow.png]
-    E --> E6[.htaccess]
-    E --> E7[index.html]
-    
     style A fill:#e1f5ff
     style B fill:#fff4e1
     style C fill:#e8f5e9
     style D fill:#fce4ec
-    style E fill:#fff9e6
     style F fill:#f3e5f5
     style G fill:#f3e5f5
     style H fill:#e3f2fd
@@ -250,15 +253,6 @@ demo-vanilla-calculator/
 │   ├── tests.html           # Comprehensive test suite
 │   ├── .htaccess            # Security: Prevents directory listing
 │   └── index.html           # Directory protection (403 Forbidden)
-├── diagrams/                # Documentation diagrams (PNG files)
-│   ├── file-structure.png
-│   ├── system-architecture.png
-│   ├── component-structure.png
-│   ├── api-overview.png
-│   ├── user-flow.png
-│   ├── calculation-flow.png
-│   ├── .htaccess            # Security: Prevents directory listing
-│   └── index.html           # Directory protection (403 Forbidden)
 ├── sw.js                   # Service worker for offline support and PWA
 ├── site.webmanifest        # Web app manifest for PWA
 ├── sitemap.xml             # XML sitemap for search engines
@@ -266,7 +260,8 @@ demo-vanilla-calculator/
 ├── robots.txt              # Search engine exclusion rules and sitemap reference
 ├── CNAME                   # Custom domain configuration (vanilla-calc.szemat.pro)
 ├── LICENSE                 # MIT License
-└── README.md               # This documentation
+├── README.md               # This documentation
+└── CHANGELOG.md            # Version history and change log
 ```
 
 ## Usage
@@ -420,7 +415,7 @@ sequenceDiagram
 ### Settings
 
 - **Open Settings**: Click the settings button in header
-- **Theme Selection**: Choose from Light, Dark, or High Contrast
+- **Theme Selection**: Choose from Light, Dark, High Contrast, Casio, or TI SR-56 Vintage
 - **Precision**: Set calculation precision (8, 10, 12, or 15 digits)
 - **History Limit**: Configure maximum history items (25, 50, or 100)
 - **All settings persist** across sessions using localStorage
@@ -455,7 +450,7 @@ sequenceDiagram
 ### Theme Toggle
 
 - Click the theme toggle button in the top-right corner to cycle through themes
-- Available themes: Light to Dark to High Contrast to Light (cycles continuously)
+- Available themes: Light → Dark → High Contrast → Casio → TI SR-56 Vintage → Light (cycles continuously)
 - Theme preference is automatically saved in localStorage
 - System preference detection: Auto-detects dark mode when no theme is set
 
@@ -706,7 +701,7 @@ class Calculator {
     debouncedAnnounceToScreenReader() { /* Debounced announcements */ }
     
     // Theme management
-    toggleTheme() { /* Theme switching (3 themes) */ }
+    toggleTheme() { /* Theme switching (5 themes: Light, Dark, High Contrast, Casio, TI SR-56 Vintage) */ }
     applyTheme() { /* Apply current theme */ }
     
     // Validation (delegates to CalculatorUtils)
@@ -905,7 +900,7 @@ The calculator is designed for static hosting and works with:
 
 - **Directory listing prevention**: Options -Indexes in all protected directories (assets/, assets/js/utils/, tests/, root)
 - **Security headers**: X-Frame-Options, X-Content-Type-Options, X-XSS-Protection, Referrer-Policy, CSP, Permissions-Policy
-- **Directory protection**: index.html files in subdirectories block direct directory access (assets/, assets/js/, assets/js/utils/, assets/css/, assets/icons/, tests/, diagrams/). These security pages use external CSS (403.css) for consistent styling.
+- **Directory protection**: index.html files in subdirectories block direct directory access (assets/, assets/js/, assets/js/utils/, assets/css/, assets/icons/, tests/). These security pages use external CSS (403.css) for consistent styling.
 - **Hidden file protection**: Blocks access to files starting with . (except .htaccess)
 - **Search engine exclusion**: robots.txt prevents indexing of asset directories
 
@@ -1653,7 +1648,7 @@ calculator.showError('Cannot divide by zero');
 
 ##### `toggleTheme()`
 
-Toggles between Light, Dark, and High Contrast themes.
+Toggles between Light, Dark, High Contrast, Casio, and TI SR-56 Vintage themes.
 
 **Parameters:** None
 
@@ -1925,6 +1920,10 @@ All methods include comprehensive error handling:
 ## Show Your Support
 
 If you find this project useful or interesting, please consider giving it a star on GitHub. Your support helps others discover this project and encourages continued development.
+
+## Changelog
+
+For detailed version history and all changes, see [CHANGELOG.md](CHANGELOG.md).
 
 ## License
 

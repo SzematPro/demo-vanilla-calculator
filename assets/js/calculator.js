@@ -13,7 +13,7 @@
  * - Performance optimizations
  * - Comprehensive error handling
  * 
- * @version 1.0.0
+ * @version 1.0.1
  * @author Waldemar Szemat
  */
 
@@ -435,13 +435,17 @@ class Calculator {
         
         if (this.previousInput === null) {
             this.previousInput = inputValue;
-        } else if (this.operator) {
+        } else if (this.operator && !this.waitingForOperand) {
+            // Only calculate if there's an existing operator AND we've entered a new number
+            // If waitingForOperand is true, the user is just changing the operator
             const result = this.calculate();
             this.currentInput = this.formatResult(result);
             this.previousInput = result;
-        } else {
+        } else if (!this.operator) {
+            // No operator set yet, just store the current input
             this.previousInput = inputValue;
         }
+        // If operator exists and waitingForOperand is true, just update the operator
         
         this.waitingForOperand = true;
         this.operator = operator;
@@ -879,7 +883,7 @@ class Calculator {
      * Toggle theme with safe localStorage access
      */
     toggleTheme() {
-        const themes = ['light', 'dark', 'high-contrast'];
+        const themes = ['light', 'dark', 'high-contrast', 'casio', 'ti-sr56-vintage'];
         const currentIndex = themes.indexOf(this.currentTheme);
         const nextIndex = (currentIndex + 1) % themes.length;
         this.currentTheme = themes[nextIndex];
@@ -897,7 +901,7 @@ class Calculator {
      */
     applyTheme() {
         // Security: Validate theme value
-        const validThemes = ['light', 'dark', 'high-contrast'];
+        const validThemes = ['light', 'dark', 'high-contrast', 'casio', 'ti-sr56-vintage'];
         if (!validThemes.includes(this.currentTheme)) {
             this.currentTheme = 'light';
         }
@@ -906,12 +910,66 @@ class Calculator {
         
         // Use icons for theme switching
         const themeLabels = {
-            'light': { icon: '🌙', label: 'Dark' },
-            'dark': { icon: '☀️', label: 'High Contrast' },
-            'high-contrast': { icon: '🌙', label: 'Light' }
+            'light': { icon: '🌙', label: 'Dark', isSvg: false },
+            'dark': { icon: '☀️', label: 'High Contrast', isSvg: false },
+            'high-contrast': { 
+                label: 'Casio', 
+                isSvg: true,
+                getIcon: function() {
+                    // Generate unique gradient ID to avoid conflicts
+                    const gradientId = 'contrastGradient' + Math.random().toString(36).substr(2, 9);
+                    return `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <defs>
+                            <linearGradient id="${gradientId}" x1="0%" y1="50%" x2="100%" y2="50%">
+                                <stop offset="0%" style="stop-color:#000000;stop-opacity:1" />
+                                <stop offset="50%" style="stop-color:#000000;stop-opacity:1" />
+                                <stop offset="50%" style="stop-color:#ffffff;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#ffffff;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <!-- Split circle representing contrast -->
+                        <circle cx="12" cy="12" r="10" fill="url(#${gradientId})" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M12 2 L12 22" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                        <!-- Radiating rays indicating visibility/accessibility -->
+                        <g stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.85">
+                            <!-- Cardinal directions -->
+                            <line x1="12" y1="0" x2="12" y2="1.5"/>
+                            <line x1="12" y1="22.5" x2="12" y2="24"/>
+                            <line x1="0" y1="12" x2="1.5" y2="12"/>
+                            <line x1="22.5" y1="12" x2="24" y2="12"/>
+                            <!-- Diagonal directions -->
+                            <line x1="3.18" y1="3.18" x2="4.59" y2="4.59"/>
+                            <line x1="19.41" y1="19.41" x2="20.82" y2="20.82"/>
+                            <line x1="3.18" y1="20.82" x2="4.59" y2="19.41"/>
+                            <line x1="19.41" y1="4.59" x2="20.82" y2="3.18"/>
+                        </g>
+                    </svg>`;
+                }
+            },
+            'casio': { 
+                icon: '🔲', 
+                label: 'TI SR-56 Vintage', 
+                isSvg: false 
+            },
+            'ti-sr56-vintage': { 
+                icon: '🔴', 
+                label: 'Light', 
+                isSvg: false 
+            }
         };
         const themeInfo = themeLabels[this.currentTheme] || themeLabels['light'];
-        this.themeIcon.textContent = themeInfo.icon;
+        
+        // Set icon content - support both text/emoji and SVG
+        if (themeInfo.isSvg) {
+            if (themeInfo.getIcon) {
+                this.themeIcon.innerHTML = themeInfo.getIcon();
+            } else {
+                this.themeIcon.innerHTML = themeInfo.icon;
+            }
+        } else {
+            this.themeIcon.textContent = themeInfo.icon;
+        }
+        
         this.themeToggle.setAttribute('aria-label', `Switch to ${themeInfo.label.toLowerCase()} theme`);
         this.themeToggle.setAttribute('title', `Switch to ${themeInfo.label.toLowerCase()} theme`);
     }
@@ -1379,13 +1437,14 @@ class Calculator {
                 <button class="settings-close" id="settingsClose" aria-label="Close settings">×</button>
             </div>
             <div class="settings-group">
-                <div class="settings-group-title">Theme</div>
+                <div class="settings-group-title" id="themeGroupTitle">Theme</div>
                 <div class="settings-option">
-                    <label class="settings-option-label">Theme</label>
-                    <select class="settings-select" id="themeSelect">
+                    <select class="settings-select" id="themeSelect" aria-labelledby="themeGroupTitle">
                         <option value="light" ${this.currentTheme === 'light' ? 'selected' : ''}>Light</option>
                         <option value="dark" ${this.currentTheme === 'dark' ? 'selected' : ''}>Dark</option>
                         <option value="high-contrast" ${this.currentTheme === 'high-contrast' ? 'selected' : ''}>High Contrast</option>
+                        <option value="casio" ${this.currentTheme === 'casio' ? 'selected' : ''}>Casio</option>
+                        <option value="ti-sr56-vintage" ${this.currentTheme === 'ti-sr56-vintage' ? 'selected' : ''}>TI SR-56 Vintage</option>
                     </select>
                 </div>
             </div>
@@ -1511,31 +1570,34 @@ if ('PerformanceObserver' in window) {
     }
     
     // Monitor Interaction to Next Paint (INP)
-    try {
-        let inpWarningCount = 0;
-        const MAX_INP_WARNINGS = 5; // Limit warnings to prevent spam
-        const inpObserver = new PerformanceObserver((list) => {
-            for (const entry of list.getEntries()) {
-                if (entry.duration && entry.duration > 200) {
-                    // Only log first few warnings to avoid console spam
-                    if (inpWarningCount < MAX_INP_WARNINGS) {
-                        console.warn('INP (Interaction to Next Paint) exceeds target:', entry.duration.toFixed(2), 'ms (target: < 200ms)');
-                        inpWarningCount++;
-                    } else if (inpWarningCount === MAX_INP_WARNINGS) {
-                        // Log once that we're suppressing further warnings
-                        console.warn('INP warnings suppressed (exceeded limit). Enable verbose mode with window.PERFORMANCE_VERBOSE = true');
-                        inpWarningCount++;
-                    }
-                    // In verbose mode, always log
-                    if (window.PERFORMANCE_VERBOSE) {
-                        console.warn('INP (Interaction to Next Paint):', entry.duration.toFixed(2), 'ms');
+    // Only monitor on http/https protocols (not file://)
+    if (window.location.protocol === 'https:' || window.location.protocol === 'http:') {
+        try {
+            let inpWarningCount = 0;
+            const MAX_INP_WARNINGS = 5; // Limit warnings to prevent spam
+            const inpObserver = new PerformanceObserver((list) => {
+                for (const entry of list.getEntries()) {
+                    if (entry.duration && entry.duration > 200) {
+                        // Only log first few warnings to avoid console spam
+                        if (inpWarningCount < MAX_INP_WARNINGS) {
+                            console.warn('INP (Interaction to Next Paint) exceeds target:', entry.duration.toFixed(2), 'ms (target: < 200ms)');
+                            inpWarningCount++;
+                        } else if (inpWarningCount === MAX_INP_WARNINGS) {
+                            // Log once that we're suppressing further warnings
+                            console.warn('INP warnings suppressed (exceeded limit). Enable verbose mode with window.PERFORMANCE_VERBOSE = true');
+                            inpWarningCount++;
+                        }
+                        // In verbose mode, always log
+                        if (window.PERFORMANCE_VERBOSE) {
+                            console.warn('INP (Interaction to Next Paint):', entry.duration.toFixed(2), 'ms');
+                        }
                     }
                 }
-            }
-        });
-        inpObserver.observe({ entryTypes: ['event'] });
-    } catch (e) {
-        // Silently fail - monitoring not critical
+            });
+            inpObserver.observe({ entryTypes: ['event'] });
+        } catch (e) {
+            // Silently fail - monitoring not critical
+        }
     }
     
     // Monitor Cumulative Layout Shift (CLS)
@@ -1605,7 +1667,9 @@ if ('PerformanceObserver' in window) {
 // Note: Calculator is initialized in index.html to expose it globally for event handlers
 
 // Service Worker registration for offline support (optional)
-if ('serviceWorker' in navigator) {
+// Only register on http/https protocols (not file://)
+if ('serviceWorker' in navigator && 
+    (window.location.protocol === 'https:' || window.location.protocol === 'http:')) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js')
             .then(registration => {
@@ -1613,8 +1677,11 @@ if ('serviceWorker' in navigator) {
                 // Only log errors, not successful registration
             })
             .catch(registrationError => {
-                // Only log registration failures
-                console.warn('Service Worker registration failed:', registrationError);
+                // Only log registration failures (suppress file:// protocol errors)
+                if (!registrationError.message.includes('URL protocol') && 
+                    !registrationError.message.includes('null')) {
+                    console.warn('Service Worker registration failed:', registrationError);
+                }
             });
     });
 }
